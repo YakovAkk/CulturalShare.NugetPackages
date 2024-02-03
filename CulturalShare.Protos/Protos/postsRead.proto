@@ -1,0 +1,28 @@
+syntax = "proto3";
+option csharp_namespace = "PostsReadProto";
+
+service PostsRead 
+{
+  rpc GetPostById (GetPostByIdRequest) returns (PostReply); 
+  rpc GetPosts (GetPostsRequest) returns (PostsList); 
+}
+
+message PostsList{
+  repeated PostReply Posts = 1;
+}
+
+message PostReply {
+  int32 Id = 1;
+  string Title = 2;
+  string Text = 3;
+}
+
+message GetPostByIdRequest {
+  int32 UserId = 1;
+  int32 Id = 2;
+}
+
+message GetPostsRequest {
+  int32 UserId = 1;
+}
+
