@@ -1,8 +1,8 @@
 ﻿namespace CulturalShare.Common.DB.Entites;
 
-public class BaseEntity
+public interface IBaseEntity
 {
     public int Id { get; set; }
-    public DateTime CreatedAt { get; set; } = DateTime.Now;
+    public DateTime CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
 }
