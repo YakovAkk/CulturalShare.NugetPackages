@@ -2,6 +2,7 @@ syntax = "proto3";
 option csharp_namespace = "PostsReadProto";
 
 import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
 
 service PostsRead 
 {
@@ -11,6 +12,7 @@ service PostsRead
 
 message PostsList{
   repeated PostReply Posts = 1;
+  int32 Length = 2;
 }
 
 message PostReply {
@@ -18,9 +20,9 @@ message PostReply {
   string Caption = 2;
   google.protobuf.Timestamp CreatedAt = 3;
   google.protobuf.Timestamp UpdatedAt = 4;
-  string ImageUrl = 5;
+  google.protobuf.StringValue ImageUrl = 5;
   int32 Likes = 6;
-  string Location = 7;
+  google.protobuf.StringValue Location = 7;
   string OwnerId = 8;
 }
 
