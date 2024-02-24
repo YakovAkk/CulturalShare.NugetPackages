@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<Authors>Monto</Authors>
+		<Product>Monto</Product>
+		<Description>This package contains repository interfaces and repository base classes.</Description>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<ReleaseVersion>8.0.1</ReleaseVersion>
+		<Version>$(ReleaseVersion).0</Version>
+		<PackageVersion>$(Version)</PackageVersion>
+		<FileVersion>$(ReleaseVersion)</FileVersion>
+		<AssemblyVersion>$(ReleaseVersion)</AssemblyVersion>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.1" />
+	</ItemGroup>
+
+</Project>
