@@ -2,8 +2,8 @@
 
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
-		<Authors>Monto</Authors>
-		<Product>Monto</Product>
+		<Authors>CulturalShare</Authors>
+		<Product>CulturalShare</Product>
 		<Description>This package contains repository interfaces and repository base classes.</Description>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<ReleaseVersion>8.0.1</ReleaseVersion>
