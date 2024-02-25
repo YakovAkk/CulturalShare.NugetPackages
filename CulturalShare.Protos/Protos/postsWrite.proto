@@ -26,8 +26,7 @@ message UpdatePostRequest {
 }
 
 message DeletePostRequest {
-  int32 UserId = 1;
-  int32 PostId = 2;
+  int32 PostId = 1;
 }
 
 message DeletePostReply {
