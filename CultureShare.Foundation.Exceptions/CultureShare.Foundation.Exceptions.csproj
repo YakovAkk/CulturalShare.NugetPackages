@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<Authors>CulturalShare</Authors>
+		<Product>CulturalShare</Product>
+		<Description>This package contains common exeptions.</Description>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<ReleaseVersion>8.0.1</ReleaseVersion>
+		<Version>$(ReleaseVersion).0</Version>
+		<PackageVersion>$(Version)</PackageVersion>
+		<FileVersion>$(ReleaseVersion)</FileVersion>
+		<AssemblyVersion>$(ReleaseVersion)</AssemblyVersion>
+	</PropertyGroup>
+
+</Project>

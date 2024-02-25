@@ -2,6 +2,8 @@
 import "Protos/postsRead.proto";
 option csharp_namespace = "PostsWriteProto";
 
+import "google/protobuf/wrappers.proto";
+
 service PostsWrite 
 {
   rpc CreatePost (CreatePostRequest) returns (PostReply); 
@@ -20,6 +22,7 @@ message UpdatePostRequest {
   string Caption = 1;
   google.protobuf.StringValue ImageUrl = 2;
   google.protobuf.StringValue Text = 3;
+  int32 PostId = 4;
 }
 
 message DeletePostRequest {

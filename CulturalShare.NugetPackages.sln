@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CulturalShare.Common.Helper
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CulturalShare.Common.DB", "CulturalShare.Common.DB\CulturalShare.Common.DB.csproj", "{7DD7C5C8-D9D5-4771-82B0-26A2086231DB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CulturalShare.Repositories", "CulturalShare.Repositories\CulturalShare.Repositories.csproj", "{00F4F609-E15B-41AC-862B-05BFDAA7C60D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CulturalShare.Repositories", "CulturalShare.Repositories\CulturalShare.Repositories.csproj", "{00F4F609-E15B-41AC-862B-05BFDAA7C60D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CultureShare.Foundation.Exceptions", "CultureShare.Foundation.Exceptions\CultureShare.Foundation.Exceptions.csproj", "{BF79DDBE-97F6-455B-95D0-B66AD8BBB59E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{00F4F609-E15B-41AC-862B-05BFDAA7C60D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{00F4F609-E15B-41AC-862B-05BFDAA7C60D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{00F4F609-E15B-41AC-862B-05BFDAA7C60D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF79DDBE-97F6-455B-95D0-B66AD8BBB59E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF79DDBE-97F6-455B-95D0-B66AD8BBB59E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF79DDBE-97F6-455B-95D0-B66AD8BBB59E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF79DDBE-97F6-455B-95D0-B66AD8BBB59E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

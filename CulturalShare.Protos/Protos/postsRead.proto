@@ -23,7 +23,7 @@ message PostReply {
   google.protobuf.StringValue ImageUrl = 5;
   int32 Likes = 6;
   google.protobuf.StringValue Location = 7;
-  string OwnerId = 8;
+  int32 OwnerId = 8;
 }
 
 message GetPostByIdRequest {
