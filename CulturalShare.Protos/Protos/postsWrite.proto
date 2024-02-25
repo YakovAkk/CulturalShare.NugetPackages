@@ -10,16 +10,16 @@ service PostsWrite
 }
 
 message CreatePostRequest {
-  int32 UserId = 1;
-  string Title = 2;
-  string Text = 3;
+  int32 OwnerId = 1;
+  string Caption = 2;
+  google.protobuf.StringValue ImageUrl = 3;
+  google.protobuf.StringValue Text = 4;
 }
 
 message UpdatePostRequest {
-  int32 UserId = 1;
-  int32 PostId = 2;
-  string Title = 3;
-  string Text = 4;
+  string Caption = 1;
+  google.protobuf.StringValue ImageUrl = 2;
+  google.protobuf.StringValue Text = 3;
 }
 
 message DeletePostRequest {
