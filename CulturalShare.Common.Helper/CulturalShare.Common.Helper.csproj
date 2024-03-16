@@ -8,7 +8,7 @@
 	<Description>This package contains common helpers.</Description>
 	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Nullable>enable</Nullable>
-    <ReleaseVersion>8.0.1</ReleaseVersion>
+    <ReleaseVersion>8.0.13</ReleaseVersion>
 	<Version>$(ReleaseVersion).0</Version>
 	<PackageVersion>$(Version)</PackageVersion>
 	<FileVersion>$(ReleaseVersion)</FileVersion>
@@ -16,6 +16,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+	<PackageReference Include="FluentValidation" Version="11.8.0" />
+	<PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.8.0" />
     <PackageReference Include="Grpc.Core.Api" Version="2.57.0" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
   </ItemGroup>

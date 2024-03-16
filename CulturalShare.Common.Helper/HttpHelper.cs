@@ -1,4 +1,5 @@
-﻿using Grpc.Core;
+﻿using CulturalShare.Common.Helper.Extensions;
+using Grpc.Core;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 
@@ -30,11 +31,21 @@ public static class HttpHelper
         throw new UnauthorizedAccessException("Unauthorized: Missing or invalid Email claim");
     }
 
-    public static Metadata CreateAuthHeader(string accessToken)
+    public static Metadata CreateHeaderWithCorrelationId()
     {
-        return new Metadata
-        {
-            { "Authorization", $"Bearer {accessToken}" }
-        };
+        var header = new Metadata().AddCorrelationIdHeader();
+        return header;
+    }
+
+    public static Metadata CreateHeaderWithCorrelationId(string correlationId)
+    {
+        var header = new Metadata().AddCorrelationIdHeader(correlationId);
+        return header;
+    }
+
+    public static Metadata CreateHeaderWithCorrelationId(HttpContext context)
+    {
+        var header = new Metadata().AddCorrelationIdHeader(context);
+        return header;
     }
 }
