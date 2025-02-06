@@ -28,6 +28,9 @@ internal class EnvHelper
         envVars.AuthServiceUrl = GetEnvVariable(EnvVariablesConstants.AuthServiceUrl, configuration);
         envVars.PostReadServiceUrl = GetEnvVariable(EnvVariablesConstants.PostReadServiceUrl, configuration);
         envVars.PostWriteServiceUrl = GetEnvVariable(EnvVariablesConstants.PostWriteServiceUrl, configuration);
+        envVars.GraylogHost = GetEnvVariable(EnvVariablesConstants.GraylogHost, configuration);
+        envVars.GraylogPort = GetEnvVariable(EnvVariablesConstants.GraylogPort, configuration);
+        envVars.GraylogTransportType = GetEnvVariable(EnvVariablesConstants.GraylogTransportType, configuration);
 
         return true;
     }

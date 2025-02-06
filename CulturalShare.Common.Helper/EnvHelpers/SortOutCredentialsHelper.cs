@@ -1,5 +1,7 @@
 ﻿using CulturalShare.Common.Helper.Configurations;
+using CulturalShare.Common.Helper.Extensions;
 using Microsoft.Extensions.Configuration;
+using Serilog.Sinks.Graylog.Core.Transport;
 
 namespace CulturalShare.Common.Helper.EnvHelpers;
 
@@ -50,6 +52,17 @@ public class SortOutCredentialsHelper
                     _enviromentVariables.MongoPort),
 
                 DatabaseName = _enviromentVariables.MongoDbName
+            });
+    }
+
+    public GraylogConfiguration GetGraylogConfiguration(string sectionName = nameof(GraylogConfiguration))
+    {
+        return GetConfiguration(sectionName,
+            () => new GraylogConfiguration
+            {
+                Port = Convert.ToInt32(_enviromentVariables.GraylogPort),
+                Host = _enviromentVariables.GraylogHost,
+                TransportType = _enviromentVariables.GraylogTransportType.ToEnum<TransportType>()
             });
     }
 
