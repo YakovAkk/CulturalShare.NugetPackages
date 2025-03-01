@@ -4,10 +4,10 @@ option csharp_namespace = "AuthenticationProto";
 
 service Authentication 
 {
-  rpc Login (LoginRequest) returns (AccessTokenResponse); // Check if user exists the system and returns Access token
-  rpc Registration (CreateUserRequest) returns (CreateUserResponse); // Create user account in the system
-  rpc RefreshToken (RefreshTokenRequest) returns (AccessTokenResponse); // Validate RefreshToken and returns new access token if RefreshToken valid
-  rpc GetOneTimeToken (GetOneTimeTokenRequest) returns (AccessTokenResponse); // returns token for one request
+  rpc LoginAsync (LoginRequest) returns (AccessTokenResponse); // Check if user exists the system and returns Access token
+  rpc CreateUserAsync (CreateUserRequest) returns (CreateUserResponse); // Create user account in the system
+  rpc RefreshTokenAsync (RefreshTokenRequest) returns (AccessTokenResponse); // Validate RefreshToken and returns new access token if RefreshToken valid
+  rpc GetOneTimeTokenAsync (GetOneTimeTokenRequest) returns (AccessTokenResponse); // returns token for one request
 }
 
 message LoginRequest {
@@ -17,15 +17,14 @@ message LoginRequest {
 
 message AccessTokenResponse {
   string AccessToken = 1;
-  int32 ExpiresInSeconds = 2; // seconds until expire
+  int32 ExpiresInSeconds = 2;
 }
 
 message CreateUserRequest {
   string Email = 1;
   string Password = 2;
-  string ConfirmPassword = 3;
-  string LastName = 4;
-  string FirstName = 5;
+  string LastName = 3;
+  string FirstName = 4;
 }
 
 message CreateUserResponse {
