@@ -1,16 +1,19 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.Data;
-using System.Text.Json;
+using Grpc.Core;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using FluentValidation;
-using CulturalShare.Common.Helper.Model;
 
 namespace CulturalShare.Common.Helper.MiddlewareClasses;
 
 public class HandlingExceptionsMiddleware
 {
+    public ILogger<HandlingExceptionsMiddleware> _logger { get; }
     public RequestDelegate _next { get; }
-    public HandlingExceptionsMiddleware(RequestDelegate next)
+    public HandlingExceptionsMiddleware(ILogger<HandlingExceptionsMiddleware> logger, RequestDelegate next)
     {
+        _logger = logger;
         _next = next;
     }
 
@@ -29,36 +32,44 @@ public class HandlingExceptionsMiddleware
     private static async Task HandleExceptionAsync(HttpContext httpContext, Exception exception)
     {
         var statusCode = GetStatusCode(exception);
-        var response = new ErrorViewModel()
+        var response = new
         {
-            Status = statusCode,
-            Error = GetError(exception),
-            ValidationErrors = GetErrors(exception)
+            status = statusCode,
+            details = GetError(exception),
+            errors = GetErrors(exception)
         };
         httpContext.Response.ContentType = "application/json";
         httpContext.Response.StatusCode = statusCode;
-        await httpContext.Response.WriteAsync(JsonSerializer.Serialize(response));
+        await httpContext.Response.WriteAsync(JsonConvert.SerializeObject(response));
     }
 
-    private static string GetError(Exception exception)
-    {
-        if (exception is ValidationException)
-            return "Validation exception has occured.";
-
-        if (exception.Message == "An error occurred" && exception.InnerException != null)
-            return exception.InnerException.Message;
-
-        return exception.Message;
-    }
+    #region Private
+    private static string GetError(Exception exception) =>
+        exception switch
+        {
+            RpcException rpc => rpc.Status.Detail,
+            ValidationException => "Validation exception has occurred.",
+            _ when exception.Message == "An error occurred" && exception.InnerException != null => exception.InnerException.Message,
+            _ => exception.Message
+        };
 
     private static int GetStatusCode(Exception exception) =>
         exception switch
         {
+            RpcException rpcException => GetStatusCodeFromRpcException(rpcException.StatusCode),
             DuplicateNameException => StatusCodes.Status400BadRequest,
             RowNotInTableException => StatusCodes.Status404NotFound,
-            ValidationException => StatusCodes.Status400BadRequest,
             _ => StatusCodes.Status500InternalServerError
         };
+
+    private static int GetStatusCodeFromRpcException(StatusCode statusCode) =>
+        statusCode switch
+        {
+            StatusCode.InvalidArgument => StatusCodes.Status400BadRequest,
+            StatusCode.Internal => StatusCodes.Status500InternalServerError,
+            _ => StatusCodes.Status500InternalServerError
+        };
+
     private static IReadOnlyDictionary<string, string[]> GetErrors(Exception exception)
     {
         IReadOnlyDictionary<string, string[]> errors = null;
@@ -77,4 +88,5 @@ public class HandlingExceptionsMiddleware
 
         return errors;
     }
+    #endregion
 }
