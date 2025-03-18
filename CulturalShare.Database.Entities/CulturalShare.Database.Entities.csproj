@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Authors>CulturalShare</Authors>
+		<Product>CulturalShare</Product>
+		<Description>This package contains common helpers.</Description>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<Nullable>enable</Nullable>
+		<ReleaseVersion>8.0.0</ReleaseVersion>
+		<Version>$(ReleaseVersion)-CUL-20-v3</Version>
+		<PackageVersion>$(Version)</PackageVersion>
+		<FileVersion>$(ReleaseVersion)</FileVersion>
+		<AssemblyVersion>$(ReleaseVersion)</AssemblyVersion>
+	</PropertyGroup>
+
+</Project>

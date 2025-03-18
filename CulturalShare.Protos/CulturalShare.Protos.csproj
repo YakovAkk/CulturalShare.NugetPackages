@@ -8,15 +8,23 @@
 	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <ReleaseVersion>8.0.8</ReleaseVersion>
-	<Version>$(ReleaseVersion).0</Version>
+    <ReleaseVersion>8.0.9</ReleaseVersion>
+	<Version>$(ReleaseVersion)-CUL-20-v8</Version>
 	<PackageVersion>$(Version)</PackageVersion>
 	<FileVersion>$(ReleaseVersion)</FileVersion>
 	<AssemblyVersion>$(ReleaseVersion)</AssemblyVersion>
+	<InvariantGlobalization>true</InvariantGlobalization>
+	<IncludeHttpRuleProtos>true</IncludeHttpRuleProtos>
   </PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Grpc.AspNetCore" Version="2.63.0" />
+		<PackageReference Include="Google.Api.CommonProtos" Version="2.16.0" />
+		<PackageReference Include="Grpc.AspNetCore" Version="2.70.0" />
+		<PackageReference Include="Grpc.Tools" Version="2.71.0">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.AspNetCore.Grpc.JsonTranscoding" Version="8.0.14" />
 	</ItemGroup>
 
 	<ItemGroup>
