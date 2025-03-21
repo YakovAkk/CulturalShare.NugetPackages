@@ -9,7 +9,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <ReleaseVersion>8.0.9</ReleaseVersion>
-	<Version>$(ReleaseVersion)-CUL-20-v8</Version>
+	<Version>$(ReleaseVersion)-CUL-20-v9</Version>
 	<PackageVersion>$(Version)</PackageVersion>
 	<FileVersion>$(ReleaseVersion)</FileVersion>
 	<AssemblyVersion>$(ReleaseVersion)</AssemblyVersion>
@@ -31,6 +31,7 @@
 		<Protobuf Include="Protos\authentication.proto" GrpcServices="Service" />
 		<Protobuf Include="Protos\postsRead.proto" GrpcServices="Service" />
 		<Protobuf Include="Protos\postsWrite.proto" GrpcServices="Service" />
+		<Protobuf Include="Protos\user.proto" GrpcServices="Service" />
 	</ItemGroup>
 
 </Project>
