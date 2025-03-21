@@ -2,8 +2,9 @@ syntax = "proto3";
 
 option csharp_namespace = "AuthenticationProto";
 import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
 
-service Authentication 
+service AuthenticationGrpcService
 {
     // Authenticates a user and returns an access token.
     rpc SignIn (SignInRequest) returns (SignInResponse) {
@@ -29,10 +30,10 @@ service Authentication
         };
     };
 
-    // Create user account in the system
-    rpc CreateUser (CreateUserRequest) returns (CreateUserResponse) {
+    // Logout a user
+    rpc SignOut (SignOutRequest) returns (google.protobuf.Empty) {
         option (google.api.http) = {
-            post: "/api/v1/users"
+            post: "/api/v1/users/logout"
             body: "*"
         };
     };
@@ -42,19 +43,6 @@ service Authentication
 message SignInRequest {
   string email = 1;
   string password = 2;
-}
-
-// Request to register a new user
-message CreateUserRequest {
-  string email = 1;
-  string password = 2;
-  string first_name = 3;
-  string last_name = 4;
-}
-
-// Response after user creation
-message CreateUserResponse {
-  int32 id = 1;
 }
 
 // Request to refresh tokens
@@ -89,3 +77,6 @@ message ServiceTokenResponse {
   string access_token = 1;
   int32 expires_in_seconds = 2;
 }
+
+// Request to logout a user
+message SignOutRequest {}

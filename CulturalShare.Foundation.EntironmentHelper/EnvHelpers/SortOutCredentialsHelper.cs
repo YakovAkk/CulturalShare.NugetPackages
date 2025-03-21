@@ -29,18 +29,17 @@ public class SortOutCredentialsHelper
 
     public string GetPostgresConnectionString(string sectionName = "DefaultConnection")
     {
-        if (_isRunningInDocker)
+        if (!HasCompletePostgresEnv())
         {
-            return ConnectionStringCreator.CreatePostgresConnectionString(
-                _enviromentVariables.Host,
-                _enviromentVariables.Port,
-                _enviromentVariables.DbName,
-                _enviromentVariables.UserName,
-                _enviromentVariables.Password);
+            return _configuration.GetConnectionString(sectionName);
         }
 
-        var dBConnectionString = _configuration.GetConnectionString(sectionName);
-        return dBConnectionString;
+        return ConnectionStringCreator.CreatePostgresConnectionString(
+            _enviromentVariables.Host,
+            _enviromentVariables.Port,
+            _enviromentVariables.DbName,
+            _enviromentVariables.UserName,
+            _enviromentVariables.Password);
     }
 
     public string GetRedisConnectionString(string sectionName = "Redis")
@@ -65,7 +64,7 @@ public class SortOutCredentialsHelper
                 SecondsUntilExpireUserJwtToken = _enviromentVariables.SecondsUntilExpireUserJwtToken,
                 SecondsUntilExpireUserRefreshToken = _enviromentVariables.SecondsUntilExpireUserRefreshToken,
                 SecondsUntilExpireServiceJwtToken = _enviromentVariables.SecondsUntilExpireServiceJwtToken,
-                JwtSecretTokenPairs = JsonConvert.DeserializeObject<Dictionary<string, string>>(_enviromentVariables.JwtSecretTokenPairs)
+                JwtSecretTokenPairs = DeserializeJwtSecretPairs(_enviromentVariables.JwtSecretTokenPairs)
             });
     }
 
@@ -124,20 +123,37 @@ public class SortOutCredentialsHelper
     }
 
     #region Private
-    private T GetConfiguration<T>(string sectionName, Func<T> createFromEnvVars) where T : new()
+    private static Dictionary<string, string> DeserializeJwtSecretPairs(string? rawJson) =>
+        string.IsNullOrWhiteSpace(rawJson)
+            ? new Dictionary<string, string>()
+            : JsonConvert.DeserializeObject<Dictionary<string, string>>(rawJson)!;
+
+    private T GetConfiguration<T>(string sectionName, Func<T> createFromEnvVars) where T : class, new()
     {
         if (_isRunningInDocker)
         {
-            T configFromEnvVars = createFromEnvVars();
+            var envConfig = TryCreateFromEnvVars(createFromEnvVars);
 
-            if (IsConfigComplete(configFromEnvVars))
+            if (envConfig is not null && IsConfigComplete(envConfig))
             {
-                return configFromEnvVars;
+                return envConfig;
             }
         }
 
-        var section = _configuration.GetSection(sectionName);
-        return section.Get<T>() ?? new T();
+        return _configuration.GetSection(sectionName).Get<T>() ?? new T();
+    }
+
+    private T TryCreateFromEnvVars<T>(Func<T> create) where T : class
+    {
+        try
+        {
+            return create();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[{nameof(GetConfiguration)}] Failed to create config {typeof(T).Name} from environment variables: {ex.Message}");
+            return null;
+        }
     }
 
     private bool IsConfigComplete<T>(T config)
@@ -151,5 +167,20 @@ public class SortOutCredentialsHelper
         }
         return true;
     }
+
+    private bool HasCompletePostgresEnv()
+    {
+        if (_enviromentVariables == null)
+        {
+            return false;
+        }
+
+        return !string.IsNullOrWhiteSpace(_enviromentVariables.Host)
+            && !string.IsNullOrWhiteSpace(_enviromentVariables.Port)
+            && !string.IsNullOrWhiteSpace(_enviromentVariables.DbName)
+            && !string.IsNullOrWhiteSpace(_enviromentVariables.UserName)
+            && !string.IsNullOrWhiteSpace(_enviromentVariables.Password);
+    }
+
     #endregion
 }

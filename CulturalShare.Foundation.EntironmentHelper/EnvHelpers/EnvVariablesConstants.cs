@@ -20,4 +20,5 @@ public class EnvVariablesConstants
     public const string GraylogHost = "GRAYLOG_HOST";
     public const string GraylogPort = "GRAYLOG_PORT";
     public const string GraylogTransportType = "GRAYLOG_TRANSPORT_TYPE";
+    public const string AspNetCoreEnvironment = "ASPNETCORE_ENVIRONMENT";
 }

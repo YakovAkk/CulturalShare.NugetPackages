@@ -70,6 +70,8 @@ public class HandlingExceptionsMiddleware
         {
             StatusCode.InvalidArgument => StatusCodes.Status400BadRequest,
             StatusCode.Internal => StatusCodes.Status500InternalServerError,
+            StatusCode.Unauthenticated => StatusCodes.Status401Unauthorized,
+            StatusCode.NotFound => StatusCodes.Status404NotFound,
             _ => StatusCodes.Status500InternalServerError
         };
 

@@ -9,7 +9,7 @@
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<Nullable>enable</Nullable>
 		<ReleaseVersion>8.0.0</ReleaseVersion>
-		<Version>$(ReleaseVersion)-CUL-20-v2</Version>
+		<Version>$(ReleaseVersion)-CUL-20-v3</Version>
 		<PackageVersion>$(Version)</PackageVersion>
 		<FileVersion>$(ReleaseVersion)</FileVersion>
 		<AssemblyVersion>$(ReleaseVersion)</AssemblyVersion>

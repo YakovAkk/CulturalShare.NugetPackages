@@ -7,7 +7,7 @@ namespace CulturalShare.Foundation.AspNetCore.Extensions.Helpers;
 
 public static class HttpHelper
 {
-    public static int GetCustomerId(HttpContext httpContext)
+    public static int GetUserId(HttpContext httpContext)
     {
         var customerIdClaim = httpContext.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier);
 
@@ -17,6 +17,23 @@ public static class HttpHelper
         }
 
         throw new UnauthorizedAccessException("Unauthorized: Missing or invalid CustomerId claim");
+    }
+
+    public static int GetUserIdOrThrowRpcException(HttpContext httpContext)
+    {
+        if (httpContext?.User?.Identity?.IsAuthenticated != true)
+        {
+            throw new RpcException(new Status(StatusCode.Unauthenticated, "Unauthorized: Missing or invalid CustomerId claim"));
+        }
+
+        var userIdClaim = httpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        if (!int.TryParse(userIdClaim, out var userId))
+        {
+            throw new RpcException(new Status(StatusCode.Unauthenticated, "Unauthorized: Missing or invalid CustomerId claim"));
+        }
+
+        return userId;
     }
 
     public static string GetCustomerEmail(HttpContext httpContext)

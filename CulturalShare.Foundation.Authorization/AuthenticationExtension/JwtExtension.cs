@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Text;
 
 namespace CulturalShare.Foundation.Authorization.AuthenticationExtension;
@@ -65,14 +66,27 @@ public static class JwtExtension
 
     private static async Task ValidateTokenAsync(TokenValidatedContext context)
     {
-        var jti = context.Principal?.FindFirst(JwtRegisteredClaimNames.Jti)?.Value;
+        var principal = context.Principal;
+        var jti = principal?.FindFirst(JwtRegisteredClaimNames.Jti)?.Value;
+        var userIdClaim = principal?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
         var blacklistService = context.HttpContext.RequestServices.GetRequiredService<IJwtBlacklistService>();
 
-        var isTokenBlacklisted = await blacklistService.IsTokenBlacklistedAsync(jti);
-
-        if (!string.IsNullOrEmpty(jti) && isTokenBlacklisted)
+        if (!string.IsNullOrEmpty(jti) && await blacklistService.IsTokenBlacklistedAsync(jti))
         {
             context.Fail("Token is revoked.");
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(userIdClaim) || !int.TryParse(userIdClaim, out var userId))
+        {
+            context.Fail("Invalid user ID claim.");
+            return;
+        }
+
+        if (await blacklistService.IsUserBlacklistedAsync(userId))
+        {
+            context.Fail("User is revoked.");
         }
     }
 }
