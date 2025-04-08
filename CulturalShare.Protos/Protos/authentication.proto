@@ -1,40 +1,82 @@
 syntax = "proto3";
 
 option csharp_namespace = "AuthenticationProto";
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
 
-service Authentication 
+service AuthenticationGrpcService
 {
-  rpc LoginAsync (LoginRequest) returns (AccessTokenResponse); // Check if user exists the system and returns Access token
-  rpc CreateUserAsync (CreateUserRequest) returns (CreateUserResponse); // Create user account in the system
-  rpc RefreshTokenAsync (RefreshTokenRequest) returns (AccessTokenResponse); // Validate RefreshToken and returns new access token if RefreshToken valid
-  rpc GetOneTimeTokenAsync (GetOneTimeTokenRequest) returns (AccessTokenResponse); // returns token for one request
+    // Authenticates a user and returns an access token.
+    rpc SignIn (SignInRequest) returns (SignInResponse) {
+        option (google.api.http) = {
+          post: "/api/v1/auth/sign-in"
+          body: "*"
+        };
+    };
+
+    // Validate RefreshToken and returns new access token if RefreshToken valid
+    rpc RefreshToken(RefreshTokenRequest) returns (RefreshTokenResponse) {
+        option (google.api.http) = {
+            post: "/api/v1/auth/refresh-token"
+            body: "*"
+        };
+    }
+
+    // Get JWT token for application service-to-service authentication
+    rpc GetServiceToken(ServiceTokenRequest) returns (ServiceTokenResponse) {
+        option (google.api.http) = {
+            post: "/api/v1/auth/service-token"
+            body: "*"
+        };
+    };
+
+    // Logout a user
+    rpc SignOut (SignOutRequest) returns (google.protobuf.Empty) {
+        option (google.api.http) = {
+            post: "/api/v1/users/logout"
+            body: "*"
+        };
+    };
 }
 
-message LoginRequest {
-  string Email = 1;
-  string Password = 2;
+// Request to sign in
+message SignInRequest {
+  string email = 1;
+  string password = 2;
 }
 
-message AccessTokenResponse {
-  string AccessToken = 1;
-  int32 ExpiresInSeconds = 2;
+// Request to refresh tokens
+message RefreshTokenRequest {
+  string refresh_token = 1;
 }
 
-message CreateUserRequest {
-  string Email = 1;
-  string Password = 2;
-  string LastName = 3;
-  string FirstName = 4;
+// Response after token refresh
+message RefreshTokenResponse {
+  string access_token = 1;
+  int32 access_token_expires_in_seconds = 2;
+  string refresh_token = 3;
+  int32 refresh_token_expires_in_seconds = 4;
 }
 
-message CreateUserResponse {
-  int32 Id = 1;
+// Sign-in response simplified
+message SignInResponse {
+  string access_token = 1;
+  int32 access_token_expires_in_seconds = 2;
+  string refresh_token = 3;
+  int32 refresh_token_expires_in_seconds = 4;
 }
 
-message RefreshTokenRequest {} // RefreshToken in header
-
-message GetOneTimeTokenRequest // RefreshToken in header 
-{
-	int32 UserId = 1;
-	string Email = 2;
+// Request to get service-to-service JWT token
+message ServiceTokenRequest {
+  string service_id = 1;
+  string service_secret = 2;
 }
+
+// Response for service-to-service JWT token
+message ServiceTokenResponse {
+  string access_token = 1;
+  int32 expires_in_seconds = 2;
+}
+
+// Request to logout a user
+message SignOutRequest {}

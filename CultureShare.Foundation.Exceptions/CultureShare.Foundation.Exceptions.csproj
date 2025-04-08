@@ -6,7 +6,7 @@
 		<Description>This package contains common exeptions.</Description>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<ReleaseVersion>8.0.1</ReleaseVersion>
-		<Version>$(ReleaseVersion).0</Version>
+		<Version>$(ReleaseVersion)</Version>
 		<PackageVersion>$(Version)</PackageVersion>
 		<FileVersion>$(ReleaseVersion)</FileVersion>
 		<AssemblyVersion>$(ReleaseVersion)</AssemblyVersion>

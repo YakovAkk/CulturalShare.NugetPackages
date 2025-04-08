@@ -1,85 +1,141 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using CulturalShare.Repositories.Enums;
+using CulturalShare.Repositories.Interfaces;
+using EFCore.BulkExtensions;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace Monto.Repositories
+namespace CulturalShare.Repositories;
+
+public class EntityFrameworkRepository<TEntity> : EntityFrameworkReadOnlyRepository<TEntity>, IRepository<TEntity> where TEntity : class
 {
-    public class EntityFrameworkRepository<TEntity> : IRepository<TEntity> where TEntity : class
+    public EntityFrameworkRepository(DbContext context) : base(context) { }
+
+    public virtual TEntity Add(TEntity entity)
     {
-        private readonly DbContext _context;
-
-        public EntityFrameworkRepository(DbContext context)
+        if (_context.Entry(entity).State != EntityState.Detached
+            && _context.Entry(entity).State != EntityState.Deleted)
         {
-            _context = context;
+            return entity;
         }
 
-        public virtual DbContext Context => _context;
+        EntityEntry res = DbSet.Add(entity);
+        return (TEntity)res.Entity;
+    }
 
-        public virtual IQueryable<TEntity> GetAll() => DbSet;
-
-        public virtual DbSet<TEntity> DbSet => Context.Set<TEntity>();
-
-        public virtual TEntity Add(TEntity entity)
+    public virtual EntityAddingType AddOrReturnExisting(TEntity entity, Expression<Func<TEntity, bool>> predicate, out TEntity entityOut)
+    {
+        var existingEntity = DbSet.FirstOrDefault(predicate);
+        if (existingEntity != null)
         {
-            if (Context.Entry(entity).State != EntityState.Detached
-                && Context.Entry(entity).State != EntityState.Deleted)
-            {
-                return entity;
-            }
-
-            EntityEntry res = DbSet.Add(entity);
-            return (TEntity)res.Entity;
+            entityOut = existingEntity;
+            return EntityAddingType.Existing;
         }
 
-        public virtual void Update(TEntity entity)
+        entityOut = Add(entity);
+        return EntityAddingType.New;
+    }
+
+    public virtual void Update(TEntity entity)
+    {
+        _context.Entry(entity).State = EntityState.Modified;
+    }
+
+    public virtual void Delete(TEntity entity)
+    {
+        if (entity == null)
         {
-            Context.Entry(entity).State = EntityState.Modified;
+            return;
         }
 
-        public virtual void Delete(TEntity entity)
-        {
-            if (entity == null)
-            {
-                return;
-            }
+        DbSet.Remove(entity);
+    }
 
-            DbSet.Remove(entity);
+    public virtual void AddRange(IEnumerable<TEntity> entities)
+    {
+        if (entities == null || !entities.Any())
+        {
+            return;
         }
 
-        public virtual void DeleteRange(List<TEntity> entity)
-        {
-            if (entity == null)
-            {
-                return;
-            }
+        DbSet.AddRange(entities);
+    }
 
-            DbSet.RemoveRange(entity);
+    /// <summary>
+    /// There is no need to call SaveChanges after BulkInsertAsync
+    /// </summary>
+    /// <param name="entities"></param>
+    /// <returns></returns>
+    public virtual async Task BulkInsertAsync(IEnumerable<TEntity> entities)
+    {
+        if (entities == null)
+        {
+            return;
         }
 
-        public virtual TEntity Find(object id) => DbSet.Find(id);
+        var entitiesList = entities.ToList();
 
-        public ValueTask<TEntity> FindAsync(object id) => DbSet.FindAsync(id);
-
-        public void SaveChanges()
+        if (!entitiesList.Any())
         {
-            _context.SaveChanges();
+            return;
         }
 
-        public Task SaveChangesAsync()
+        await _context.BulkInsertAsync(entities.ToList()).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// There is no need to call SaveChanges after BulkInsert
+    /// </summary>
+    /// <param name="entities"></param>
+    /// <returns></returns>
+    public virtual void BulkInsert(IEnumerable<TEntity> entities)
+    {
+        if (entities == null)
         {
-            return _context.SaveChangesAsync();
+            return;
         }
 
-        public virtual void AddRange(List<TEntity> entity)
-        {
-            if (entity == null)
-            {
-                return;
-            }
+        var entitiesList = entities.ToList();
 
-            DbSet.AddRange(entity);
+        if (!entitiesList.Any())
+        {
+            return;
         }
+
+        _context.BulkInsert(entitiesList);
+    }
+
+    public virtual void UpdateRange(IEnumerable<TEntity> entities)
+    {
+        if (entities == null || !entities.Any())
+        {
+            return;
+        }
+
+        DbSet.UpdateRange(entities);
+    }
+
+    public virtual void DeleteRange(IEnumerable<TEntity> entities)
+    {
+        if (entities == null || !entities.Any())
+        {
+            return;
+        }
+
+        DbSet.RemoveRange(entities);
+    }
+
+    public int SaveChanges()
+    {
+        return _context.SaveChanges();
+    }
+
+    public Task<int> SaveChangesAsync()
+    {
+        return _context.SaveChangesAsync();
     }
 }

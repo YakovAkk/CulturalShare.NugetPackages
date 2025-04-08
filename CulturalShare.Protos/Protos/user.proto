@@ -1,0 +1,119 @@
+syntax = "proto3";
+
+option csharp_namespace = "AuthenticationProto";
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+
+service UserGrpcService
+{
+    // Create user account in the system
+    rpc CreateUser (CreateUserRequest) returns (CreateUserResponse) {
+        option (google.api.http) = {
+            post: "/api/v1/users"
+            body: "*"
+        };
+    };
+
+    // Search user by name
+    rpc SearchUserByName (SearchUserRequest) returns (SearchUserResponse) {
+        option (google.api.http) = {
+            get: "/api/v1/users/search"
+        };
+    };
+
+    // Follow a user
+    rpc FollowUser (FollowUserRequest) returns (google.protobuf.Empty) {
+        option (google.api.http) = {
+            post: "/api/v1/users/follow"
+            body: "*"
+        };
+    };
+
+    // Unfollow a user
+    rpc UnfollowUser (UnfollowUserRequest) returns (google.protobuf.Empty) {
+        option (google.api.http) = {
+            post: "/api/v1/users/unfollow"
+            body: "*"
+        };
+    };
+
+    // Enable/Disable notifications for a user
+    rpc ToggleNotifications (ToggleNotificationsRequest) returns (google.protobuf.Empty) {
+        option (google.api.http) = {
+            post: "/api/v1/users/notifications"
+            body: "*"
+        };
+    };
+
+    // Restrict a user from seeing content
+    rpc RestrictUser (RestrictUserRequest) returns (google.protobuf.Empty) {
+        option (google.api.http) = {
+            post: "/api/v1/users/restrict"
+            body: "*"
+        };
+    };
+
+    // Allow a user to see content again
+    rpc AllowUser (AllowUserRequest) returns (google.protobuf.Empty) {
+        option (google.api.http) = {
+            post: "/api/v1/users/allow"
+            body: "*"
+        };
+    };
+}
+
+// Request to register a new user
+message CreateUserRequest {
+    string email = 1;
+    string password = 2;
+    string first_name = 3;
+    string last_name = 4;
+}
+
+// Response after user creation
+message CreateUserResponse {
+    int32 id = 1;
+}
+
+// Request to search a user by name
+message SearchUserRequest {
+    string name = 1;
+}
+
+// Response with list of matched users
+message SearchUserResponse {
+    repeated UserInfo users = 1;
+}
+
+// Request to follow a user
+message FollowUserRequest {
+    int32 followee_id = 1;
+}
+
+// Request to unfollow a user
+message UnfollowUserRequest {
+    int32 followee_id = 1;
+}
+
+// Request to enable/disable notifications
+message ToggleNotificationsRequest {
+    bool notifications_enabled = 1;
+}
+
+// Request to restrict a user from viewing content
+message RestrictUserRequest {
+    int32 user_id_to_restrict = 1;
+}
+
+// Request to allow a user to see content again
+message AllowUserRequest {
+    int32 user_id_to_allow_observing = 1;
+}
+
+// User information
+message UserInfo {
+    int32 id = 1;
+    string email = 2;
+    string first_name = 3;
+    string last_name = 4;
+}

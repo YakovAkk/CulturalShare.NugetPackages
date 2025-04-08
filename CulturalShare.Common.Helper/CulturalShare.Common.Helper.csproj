@@ -8,14 +8,15 @@
 	<Description>This package contains common helpers.</Description>
 	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Nullable>enable</Nullable>
-    <ReleaseVersion>8.0.25</ReleaseVersion>
-	<Version>$(ReleaseVersion).0</Version>
+    <ReleaseVersion>8.0.26</ReleaseVersion>
+	<Version>$(ReleaseVersion)</Version>
 	<PackageVersion>$(Version)</PackageVersion>
 	<FileVersion>$(ReleaseVersion)</FileVersion>
 	<AssemblyVersion>$(ReleaseVersion)</AssemblyVersion>
   </PropertyGroup>
 
   <ItemGroup>
+	<PackageReference Include="ErrorOr" Version="2.0.1" />
 	<PackageReference Include="FluentValidation" Version="11.9.1" />
 	<PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.9.1" />
     <PackageReference Include="Grpc.Core.Api" Version="2.63.0" />
@@ -26,10 +27,6 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Serilog.Sinks.Graylog" Version="3.1.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\CultureShare.Foundation.Exceptions\CultureShare.Foundation.Exceptions.csproj" />
   </ItemGroup>
 
 </Project>
