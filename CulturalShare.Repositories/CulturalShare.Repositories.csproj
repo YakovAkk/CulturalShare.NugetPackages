@@ -7,7 +7,7 @@
 		<Description>This package contains repository interfaces and repository base classes.</Description>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<ReleaseVersion>8.0.2</ReleaseVersion>
-		<Version>$(ReleaseVersion)-CUL-20-v2</Version>
+		<Version>$(ReleaseVersion)</Version>
 		<PackageVersion>$(Version)</PackageVersion>
 		<FileVersion>$(ReleaseVersion)</FileVersion>
 		<AssemblyVersion>$(ReleaseVersion)</AssemblyVersion>
