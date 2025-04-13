@@ -1,37 +1,53 @@
 syntax = "proto3";
+
+package socialmedia;
+
 option csharp_namespace = "PostsReadProto";
 
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/wrappers.proto";
+import "google/protobuf/empty.proto";
+import "google/api/annotations.proto";
 
-service PostsRead 
-{
-  rpc GetPostById (GetPostByIdRequest) returns (PostReply); 
-  rpc GetPosts (GetPostsRequest) returns (PostsList); 
+// ========== Service ==========
+
+service PostsRead {
+  rpc GetPost (GetPostRequest) returns (PostResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/posts/{post_id}"
+    };
+  }
+  
+  rpc GetPostsPaged (PostsPagedFilterRequest) returns (stream PostResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/posts"
+    };
+  }
 }
 
-message PostsList{
-  repeated PostReply Posts = 1;
-  int32 Length = 2;
+// ========== Messages ==========
+
+message GetPostRequest {
+  int32 post_id = 1;
 }
 
-message PostReply {
-  int32 Id = 1;
-  string Caption = 2;
-  google.protobuf.Timestamp CreatedAt = 3;
-  google.protobuf.Timestamp UpdatedAt = 4;
-  google.protobuf.StringValue ImageUrl = 5;
-  int32 Likes = 6;
-  google.protobuf.StringValue Location = 7;
-  int32 OwnerId = 8;
+message PostsPagedFilterRequest {
+  int32 page_size = 1;
+  int32 page_index = 2;
+  bool sort_descending = 3;
 }
 
-message GetPostByIdRequest {
-  int32 UserId = 1;
-  int32 Id = 2;
+message PostResponse {
+  int32 post_id = 1;
+  int32 author_id = 2;
+  string content = 3;
+  google.protobuf.Timestamp created_at = 4;
+  google.protobuf.Timestamp updated_at = 5;
+  repeated CommentResponse comments = 6;
 }
 
-message GetPostsRequest {
-  int32 UserId = 1;
+message CommentResponse {
+  int32 comment_id = 1;
+  string content = 2;
+  int32 author_id = 3;
 }
-
