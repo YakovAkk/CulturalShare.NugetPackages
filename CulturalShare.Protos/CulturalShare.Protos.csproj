@@ -9,7 +9,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <ReleaseVersion>9.0.0</ReleaseVersion>
-	<Version>$(ReleaseVersion)-CUL-20-v9</Version>
+	<Version>$(ReleaseVersion)-CUL-20-v10</Version>
 	<PackageVersion>$(Version)</PackageVersion>
 	<FileVersion>$(ReleaseVersion)</FileVersion>
 	<AssemblyVersion>$(ReleaseVersion)</AssemblyVersion>

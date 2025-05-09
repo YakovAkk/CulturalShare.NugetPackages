@@ -7,12 +7,22 @@ option csharp_namespace = "PostsReadProto";
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/wrappers.proto";
 import "google/protobuf/empty.proto";
+import "google/api/annotations.proto";
 
 // ========== Service ==========
 
 service PostsRead {
-  rpc GetPost (GetPostRequest) returns (PostResponse);
-  rpc GetPostsPaged (PostsPagedFilterRequest) returns (stream PostResponse);
+  rpc GetPost (GetPostRequest) returns (PostResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/posts/{post_id}"
+    };
+  }
+  
+  rpc GetPostsPaged (PostsPagedFilterRequest) returns (stream PostResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/posts"
+    };
+  }
 }
 
 // ========== Messages ==========

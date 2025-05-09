@@ -4,18 +4,55 @@ option csharp_namespace = "PostsWriteProto";
 
 import "google/protobuf/wrappers.proto";
 import "google/protobuf/empty.proto";
+import "google/api/annotations.proto";
 
 service PostsWrite 
 {
-  rpc CreatePost (CreatePostRequest) returns (CreatePostResponse);
-  rpc EditPost (EditPostRequest) returns (google.protobuf.Empty);
-  rpc DeletePost (DeletePostRequest) returns (google.protobuf.Empty);
+  rpc CreatePost (CreatePostRequest) returns (CreatePostResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/posts"
+      body: "*"
+    };
+  }
+
+  rpc EditPost (EditPostRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      put: "/api/v1/posts/{post_id}"
+      body: "*"
+    };
+  }
+
+  rpc DeletePost (DeletePostRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/api/v1/posts/{post_id}"
+    };
+  }
 
   // Interaction Functions
-  rpc LikePost (LikeRequest) returns (google.protobuf.Empty);
-  rpc RemoveLike (RemoveLikeRequest) returns (google.protobuf.Empty);
-  rpc AddComment (CommentRequest) returns (socialmedia.CommentResponse);
-  rpc RemoveComment (RemoveCommentRequest) returns (google.protobuf.Empty);
+  rpc LikePost (LikeRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/api/v1/posts/{post_id}/like"
+    };
+  }
+
+  rpc RemoveLike (RemoveLikeRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/api/v1/posts/{post_id}/like"
+    };
+  }
+
+  rpc AddComment (CommentRequest) returns (socialmedia.CommentResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/posts/{post_id}/comments"
+      body: "*"
+    };
+  }
+
+  rpc RemoveComment (RemoveCommentRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/api/v1/posts/comments/{comment_id}"
+    };
+  }
 }
 
 message CreatePostRequest {
