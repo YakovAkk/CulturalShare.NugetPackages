@@ -1,9 +1,14 @@
 @echo off
 setlocal enabledelayedexpansion
 
++if "%NUGET_API_KEY%"=="" (
++  echo ERROR: Please set NUGET_API_KEY environment variable.
++  exit /b 1
++)
++set API_KEY=%NUGET_API_KEY%
+
 REM === NuGet settings ===
 set NUGET_SOURCE=https://nuget.pkg.github.com/YakovAkk/index.json
-set API_KEY=******
 
 REM === Loop through all folders ===
 for /r %%d in (.) do (
