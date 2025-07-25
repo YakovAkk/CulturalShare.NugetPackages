@@ -1,12 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net8.0</TargetFramework>
+		<TargetFramework>net9.0</TargetFramework>
 		<Authors>CulturalShare</Authors>
 		<Product>CulturalShare</Product>
 		<Description>This package contains repository interfaces and repository base classes.</Description>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-		<ReleaseVersion>8.0.2</ReleaseVersion>
+		<ReleaseVersion>9.0.0</ReleaseVersion>
 		<Version>$(ReleaseVersion)</Version>
 		<PackageVersion>$(Version)</PackageVersion>
 		<FileVersion>$(ReleaseVersion)</FileVersion>
@@ -14,9 +14,9 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="EFCore.BulkExtensions.SqlServer" Version="8.1.1" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.8" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.8" />
+		<PackageReference Include="EFCore.BulkExtensions.SqlServer" Version="9.0.1" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.4" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.4" />
 	</ItemGroup>
 
 </Project>

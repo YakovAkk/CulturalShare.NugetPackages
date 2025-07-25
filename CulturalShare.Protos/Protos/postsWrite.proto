@@ -3,33 +3,90 @@ import "Protos/postsRead.proto";
 option csharp_namespace = "PostsWriteProto";
 
 import "google/protobuf/wrappers.proto";
+import "google/protobuf/empty.proto";
+import "google/api/annotations.proto";
 
 service PostsWrite 
 {
-  rpc CreatePost (CreatePostRequest) returns (PostReply); 
-  rpc UpdatePost (UpdatePostRequest) returns (PostReply); 
-  rpc DeletePost (DeletePostRequest) returns (DeletePostReply); 
+  rpc CreatePost (CreatePostRequest) returns (CreatePostResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/posts"
+      body: "*"
+    };
+  }
+
+  rpc EditPost (EditPostRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      put: "/api/v1/posts/{post_id}"
+      body: "*"
+    };
+  }
+
+  rpc DeletePost (DeletePostRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/api/v1/posts/{post_id}"
+    };
+  }
+
+  // Interaction Functions
+  rpc LikePost (LikeRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/api/v1/posts/{post_id}/like"
+    };
+  }
+
+  rpc RemoveLike (RemoveLikeRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/api/v1/posts/{post_id}/like"
+    };
+  }
+
+  rpc AddComment (CommentRequest) returns (socialmedia.CommentResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/posts/{post_id}/comments"
+      body: "*"
+    };
+  }
+
+  rpc RemoveComment (RemoveCommentRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/api/v1/posts/comments/{comment_id}"
+    };
+  }
 }
 
 message CreatePostRequest {
-  int32 OwnerId = 1;
-  string Caption = 2;
-  google.protobuf.StringValue ImageUrl = 3;
-  google.protobuf.StringValue Text = 4;
+  string content = 1;
 }
 
-message UpdatePostRequest {
-  string Caption = 1;
-  google.protobuf.StringValue ImageUrl = 2;
-  google.protobuf.StringValue Text = 3;
-  int32 PostId = 4;
+message CreatePostResponse {
+  int32 post_id = 1;
+}
+
+message EditPostRequest {
+  int32 post_id = 1;
+  string new_content = 2;
 }
 
 message DeletePostRequest {
-  int32 PostId = 1;
+  int32 post_id = 1;
 }
 
-message DeletePostReply {
-   int32 StatusCode = 1;
+message CommentRequest {
+  int32 post_id = 1;
+  string content = 2;
+}
+
+// ========== Interaction Messages ==========
+message LikeRequest {
+  int32 post_id = 1;
+} 
+
+message RemoveLikeRequest {
+  int32 post_id = 1;
+}
+
+message RemoveCommentRequest {
+  int32 comment_id = 1;
 }
 
