@@ -1,4 +1,4 @@
-﻿namespace CulturalShare.Foundation.EntironmentHelper.Configurations;
+﻿namespace CulturalShare.Foundation.EnvironmentHelper.Configurations;
 
 public class MongoConfiguration
 {

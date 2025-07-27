@@ -1,0 +1,64 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "AuthenticationBackProto";
+
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+
+service AuthenticationBackGrpcService {
+
+  // Get JWT token for application user authentication
+  rpc RevokeUserToken (RevokeUserTokenRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/api/v1/auth/user-token/revoke"
+      body: "*"
+    };
+  }
+
+  // Get JWT token for application user authentication
+  rpc GetUserToken (UserTokenRequest) returns (UserTokenResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/auth/user-token"
+      body: "*"
+    };
+  }
+
+  // Get JWT token for application service-to-service authentication
+  rpc GetServiceToken (ServiceTokenRequest) returns (ServiceTokenResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/auth/service-token"
+      body: "*"
+    };
+  }
+}
+
+// Request to get a JWT token for a user
+message RevokeUserTokenRequest {
+  int32 user_id = 1;
+}
+
+// Request to get a JWT token for a user
+message UserTokenRequest {
+  int32 user_id = 1;
+  string email = 2;
+}
+
+// Response for user JWT token
+message UserTokenResponse {
+  string access_token = 1;
+  int32 access_token_expires_in_seconds = 2;
+  string refresh_token = 3;
+  int32 refresh_token_expires_in_seconds = 4;
+}
+
+// Request to get a JWT token for service-to-service communication
+message ServiceTokenRequest {
+  string service_id = 1;
+  string service_secret = 2;
+}
+
+// Response for service-to-service JWT token
+message ServiceTokenResponse {
+  string access_token = 1;
+  int32 expires_in_seconds = 2;
+}

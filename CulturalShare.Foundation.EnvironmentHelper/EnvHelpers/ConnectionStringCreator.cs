@@ -1,6 +1,6 @@
-﻿using CulturalShare.Foundation.EntironmentHelper.Configurations;
+﻿using CulturalShare.Foundation.EnvironmentHelper.Configurations;
 
-namespace CulturalShare.Foundation.EntironmentHelper.EnvHelpers;
+namespace CulturalShare.Foundation.EnvironmentHelper.EnvHelpers;
 
 internal static class ConnectionStringCreator
 {

@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+import "Protos/Auth/authenticationBack.proto";
+
+option csharp_namespace = "AuthenticationProto";
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+
+service AuthenticationGrpcService
+{
+    // Validate RefreshToken and returns new access token if RefreshToken valid
+    rpc RefreshToken(RefreshTokenRequest) returns (RefreshTokenResponse) {
+        option (google.api.http) = {
+            post: "/api/v1/auth/refresh-token"
+            body: "*"
+        };
+    }
+}
+
+// Request to refresh tokens
+message RefreshTokenRequest {
+  string refresh_token = 1;
+  UserTokenRequest user = 2;
+}
+
+// Response after token refresh
+message RefreshTokenResponse {
+  string access_token = 1;
+  int32 access_token_expires_in_seconds = 2;
+  string refresh_token = 3;
+  int32 refresh_token_expires_in_seconds = 4;
+}

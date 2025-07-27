@@ -1,4 +1,4 @@
-﻿namespace CulturalShare.Foundation.EntironmentHelper.EnvHelpers;
+﻿namespace CulturalShare.Foundation.EnvironmentHelper.EnvHelpers;
 
 public class EnvVariablesConstants
 {

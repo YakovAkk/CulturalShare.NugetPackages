@@ -6,7 +6,7 @@ import "google/protobuf/wrappers.proto";
 import "google/protobuf/empty.proto";
 import "google/api/annotations.proto";
 
-service PostsWrite 
+service PostsWriteGrpcService
 {
   rpc CreatePost (CreatePostRequest) returns (CreatePostResponse) {
     option (google.api.http) = {

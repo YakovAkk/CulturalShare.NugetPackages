@@ -8,8 +8,8 @@
 	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <ReleaseVersion>9.0.0</ReleaseVersion>
-	<Version>$(ReleaseVersion)</Version>
+    <ReleaseVersion>9.0.1</ReleaseVersion>
+	<Version>$(ReleaseVersion)-CUL-23-v4</Version>
 	<PackageVersion>$(Version)</PackageVersion>
 	<FileVersion>$(ReleaseVersion)</FileVersion>
 	<AssemblyVersion>$(ReleaseVersion)</AssemblyVersion>
@@ -28,7 +28,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Protobuf Include="Protos\authentication.proto" GrpcServices="Both" />
+		<Protobuf Include="Protos\Auth\authentication.proto" GrpcServices="Both" />
+		<Protobuf Include="Protos\Auth\authenticationBack.proto" GrpcServices="Both" />
 		<Protobuf Include="Protos\postsRead.proto" GrpcServices="Both" />
 		<Protobuf Include="Protos\postsWrite.proto" GrpcServices="Both" />
 		<Protobuf Include="Protos\user.proto" GrpcServices="Both" />

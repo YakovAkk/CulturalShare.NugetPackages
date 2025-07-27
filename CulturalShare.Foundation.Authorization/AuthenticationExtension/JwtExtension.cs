@@ -1,5 +1,5 @@
 ﻿using CulturalShare.Foundation.Authorization.JwtServices;
-using CulturalShare.Foundation.EntironmentHelper.Configurations;
+using CulturalShare.Foundation.EnvironmentHelper.Configurations;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -40,20 +40,31 @@ public static class JwtExtension
     {
         var jwtHandler = new JwtSecurityTokenHandler();
         var jwt = jwtHandler.ReadJwtToken(token);
-        var serviceId = jwt.Audiences.FirstOrDefault();
 
-        if (string.IsNullOrEmpty(serviceId) || !jwtSettings.JwtSecretTokenPairs.TryGetValue(serviceId, out var serviceSecret))
+        var serviceId = jwt.Audiences.FirstOrDefault();
+        if (string.IsNullOrWhiteSpace(serviceId))
         {
-            throw new SecurityTokenException("Invalid audience");
+            throw new SecurityTokenException("Missing or invalid audience in token.");
         }
 
-        return new[] { new SymmetricSecurityKey(Encoding.UTF8.GetBytes(serviceSecret)) };
+        var serviceConfig = jwtSettings.ServicesJwtConfigs
+            .FirstOrDefault(cfg => cfg.ServiceId == serviceId);
+
+        if (serviceConfig == null || string.IsNullOrWhiteSpace(serviceConfig.ServiceSecret))
+        {
+            throw new SecurityTokenException($"Invalid service configuration for audience '{serviceId}'.");
+        }
+
+        var keyBytes = Encoding.UTF8.GetBytes(serviceConfig.ServiceSecret);
+        var securityKey = new SymmetricSecurityKey(keyBytes);
+
+        return new[] { securityKey };
     }
 
     private static bool ValidateAudience(IEnumerable<string> audiences, JwtServicesConfig jwtSettings)
     {
-        var isAudienceValid = audiences.Any(a => jwtSettings.JwtSecretTokenPairs.ContainsKey(a));
-        return isAudienceValid;
+        var validServiceIds = jwtSettings.ServicesJwtConfigs.Select(x => x.ServiceId);
+        return audiences.Any(a => validServiceIds.Contains(a));
     }
 
     private static JwtBearerEvents GetJwtBearerEvents()
@@ -67,26 +78,34 @@ public static class JwtExtension
     private static async Task ValidateTokenAsync(TokenValidatedContext context)
     {
         var principal = context.Principal;
-        var jti = principal?.FindFirst(JwtRegisteredClaimNames.Jti)?.Value;
-        var userIdClaim = principal?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (principal == null)
+        {
+            context.Fail("Missing principal.");
+            return;
+        }
+
+        var jti = principal.FindFirst(JwtRegisteredClaimNames.Jti)?.Value;
 
         var blacklistService = context.HttpContext.RequestServices.GetRequiredService<IJwtBlacklistService>();
 
-        if (!string.IsNullOrEmpty(jti) && await blacklistService.IsTokenBlacklistedAsync(jti))
+        if (!string.IsNullOrWhiteSpace(jti) && await blacklistService.IsTokenBlacklistedAsync(jti))
         {
             context.Fail("Token is revoked.");
             return;
         }
 
-        if (string.IsNullOrWhiteSpace(userIdClaim) || !int.TryParse(userIdClaim, out var userId))
+        var userIdClaim = principal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        if (string.IsNullOrWhiteSpace(userIdClaim))
         {
-            context.Fail("Invalid user ID claim.");
+            context.Fail("Missing user ID claim.");
             return;
         }
 
-        if (await blacklistService.IsUserBlacklistedAsync(userId))
+        if (await blacklistService.IsUserBlacklistedAsync(userIdClaim))
         {
             context.Fail("User is revoked.");
+            return;
         }
     }
 }

@@ -41,7 +41,7 @@ public class JwtBlacklistService : IJwtBlacklistService
     /// <summary>
     /// Adds a user ID to the user blacklist cache.
     /// </summary>
-    public async Task BlacklistUserAsync(int userId, TimeSpan expiry)
+    public async Task BlacklistUserAsync(string userId, TimeSpan expiry)
     {
         await _redisDb.StringSetAsync(BlacklistUserPrefix + userId, "revoked", expiry);
     }
@@ -49,7 +49,7 @@ public class JwtBlacklistService : IJwtBlacklistService
     /// <summary>
     /// Checks if a user is blacklisted.
     /// </summary>
-    public async Task<bool> IsUserBlacklistedAsync(int userId)
+    public async Task<bool> IsUserBlacklistedAsync(string userId)
     {
         return await _redisDb.KeyExistsAsync(BlacklistUserPrefix + userId);
     }
@@ -57,7 +57,7 @@ public class JwtBlacklistService : IJwtBlacklistService
     /// <summary>
     /// Removes a user from the blacklist.
     /// </summary>
-    public async Task RemoveUserFromBlacklistAsync(int userId)
+    public async Task RemoveUserFromBlacklistAsync(string userId)
     {
         await _redisDb.KeyDeleteAsync(BlacklistUserPrefix + userId);
     }

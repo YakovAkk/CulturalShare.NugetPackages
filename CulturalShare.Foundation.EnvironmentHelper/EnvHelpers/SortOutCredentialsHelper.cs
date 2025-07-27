@@ -1,10 +1,10 @@
 ﻿using CulturalShare.Common.Helper.Extensions;
-using CulturalShare.Foundation.EntironmentHelper.Configurations;
+using CulturalShare.Foundation.EnvironmentHelper.Configurations;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Serilog.Sinks.Graylog.Core.Transport;
 
-namespace CulturalShare.Foundation.EntironmentHelper.EnvHelpers;
+namespace CulturalShare.Foundation.EnvironmentHelper.EnvHelpers;
 
 public class SortOutCredentialsHelper
 {
@@ -60,11 +60,12 @@ public class SortOutCredentialsHelper
         return GetConfiguration(sectionName,
             () => new JwtServicesConfig
             {
+                CurrentServiceId = _enviromentVariables.CurrentServiceId,
                 Issuer = _enviromentVariables.JwtIssuer,
                 SecondsUntilExpireUserJwtToken = _enviromentVariables.SecondsUntilExpireUserJwtToken,
                 SecondsUntilExpireUserRefreshToken = _enviromentVariables.SecondsUntilExpireUserRefreshToken,
                 SecondsUntilExpireServiceJwtToken = _enviromentVariables.SecondsUntilExpireServiceJwtToken,
-                JwtSecretTokenPairs = DeserializeJwtSecretPairs(_enviromentVariables.JwtSecretTokenPairs)
+                ServicesJwtConfigs = DeserializeJwtSecretPairs(_enviromentVariables.JwtSecretTokenPairs)
             });
     }
 
@@ -123,10 +124,10 @@ public class SortOutCredentialsHelper
     }
 
     #region Private
-    private static Dictionary<string, string> DeserializeJwtSecretPairs(string? rawJson) =>
+    private static List<ServiceJwtConfig> DeserializeJwtSecretPairs(string? rawJson) =>
         string.IsNullOrWhiteSpace(rawJson)
-            ? new Dictionary<string, string>()
-            : JsonConvert.DeserializeObject<Dictionary<string, string>>(rawJson)!;
+            ? new List<ServiceJwtConfig>()
+            : JsonConvert.DeserializeObject<List<ServiceJwtConfig>>(rawJson)!;
 
     private T GetConfiguration<T>(string sectionName, Func<T> createFromEnvVars) where T : class, new()
     {
