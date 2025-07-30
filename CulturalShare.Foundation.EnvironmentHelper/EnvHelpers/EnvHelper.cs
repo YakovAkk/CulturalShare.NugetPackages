@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 
-namespace CulturalShare.Foundation.EntironmentHelper.EnvHelpers;
+namespace CulturalShare.Foundation.EnvironmentHelper.EnvHelpers;
 
 internal class EnvHelper
 {

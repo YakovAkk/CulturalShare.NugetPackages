@@ -1,5 +1,5 @@
 ﻿
-namespace CulturalShare.Foundation.EntironmentHelper.EnvHelpers;
+namespace CulturalShare.Foundation.EnvironmentHelper.EnvHelpers;
 
 internal class EnvironmentVariables
 {
@@ -29,4 +29,5 @@ internal class EnvironmentVariables
     public int SecondsUntilExpireUserRefreshToken { get; set; }
     public int SecondsUntilExpireServiceJwtToken { get; set; }
     public string JwtSecretTokenPairs { get; set; }
+    public string CurrentServiceId { get; set; }
 }

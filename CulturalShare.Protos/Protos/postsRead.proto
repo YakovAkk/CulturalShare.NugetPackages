@@ -11,7 +11,7 @@ import "google/api/annotations.proto";
 
 // ========== Service ==========
 
-service PostsRead {
+service PostsReadGrpcService {
   rpc GetPost (GetPostRequest) returns (PostResponse) {
     option (google.api.http) = {
       get: "/api/v1/posts/{post_id}"

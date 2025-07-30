@@ -1,6 +1,6 @@
 ﻿using Serilog.Sinks.Graylog.Core.Transport;
 
-namespace CulturalShare.Foundation.EntironmentHelper.Configurations;
+namespace CulturalShare.Foundation.EnvironmentHelper.Configurations;
 
 public class GraylogConfiguration
 {

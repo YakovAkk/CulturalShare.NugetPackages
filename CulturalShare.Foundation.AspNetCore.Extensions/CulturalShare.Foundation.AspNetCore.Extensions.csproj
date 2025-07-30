@@ -8,7 +8,7 @@
 		<Description>This package contains common helpers.</Description>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<Nullable>enable</Nullable>
-		<ReleaseVersion>9.0.0</ReleaseVersion>
+		<ReleaseVersion>9.0.1</ReleaseVersion>
 		<Version>$(ReleaseVersion)</Version>
 		<PackageVersion>$(Version)</PackageVersion>
 		<FileVersion>$(ReleaseVersion)</FileVersion>
@@ -38,7 +38,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\CulturalShare.Foundation.EntironmentHelper\CulturalShare.Foundation.EntironmentHelper.csproj" />
+	  <ProjectReference Include="..\CulturalShare.Foundation.EnvironmentHelper\CulturalShare.Foundation.EnvironmentHelper.csproj" />
 	  <ProjectReference Include="..\CultureShare.Foundation.Exceptions\CultureShare.Foundation.Exceptions.csproj" />
 	</ItemGroup>
 

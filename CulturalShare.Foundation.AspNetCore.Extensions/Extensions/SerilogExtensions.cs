@@ -1,9 +1,7 @@
 ﻿using CulturalShare.Foundation.AspNetCore.Extensions.Constants;
-using CulturalShare.Foundation.EntironmentHelper.Configurations;
-using CulturalShare.Foundation.EntironmentHelper.EnvHelpers;
+using CulturalShare.Foundation.EnvironmentHelper.EnvHelpers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Sinks.Graylog;
 
